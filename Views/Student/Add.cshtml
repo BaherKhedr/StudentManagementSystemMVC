@@ -1,0 +1,22 @@
+﻿@model Student
+
+<form asp-controller="Student" asp-action="SaveAdd" method="post">
+    <div asp-validation-summary="All" style="color: red"></div>
+    <div>
+        <label>Id</label>
+        <input asp-for="Id" class="form-control" value="@Model?.Id" />
+    </div>
+    <div>
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" value="@Model?.Name" />
+    </div>
+    <div>
+        <label>Age</label>
+        <input asp-for="Age" class="form-control" value="@Model?.Age" />
+    </div>
+    <div>
+        <label>Grade</label>
+        <input asp-for="Grade" class="form-control" value="@Model?.Grade" />
+    </div>
+    <button type="submit" class="btn btn-success">Add</button>
+</form>

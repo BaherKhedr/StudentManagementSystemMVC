@@ -1,0 +1,23 @@
+﻿# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.rsuser
+
+# Build output
+bin/
+obj/
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains Rider
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ASP.NET Core
+wwwroot/lib/
