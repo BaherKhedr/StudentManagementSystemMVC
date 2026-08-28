@@ -33,6 +33,7 @@ namespace StudentManagementSystemMVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                TempData["Found"] = "Student Added Successfully!";
                 _studentRepository.Add(student);
                 return RedirectToAction("ShowAll");
             }
@@ -53,16 +54,32 @@ namespace StudentManagementSystemMVC.Controllers
                 _studentRepository.Update(student);
                 return RedirectToAction("ShowAll");
             }
+
             return View("Edit", student);
         }
         [HttpPost]
         public IActionResult Delete(int id)
         {
             var deletedstudent = _studentRepository.GetById(id);
+
             if (deletedstudent == null)
                 return NotFound("Student not found");
+
             _studentRepository.Delete(deletedstudent);
             return RedirectToAction("ShowAll");
+        }
+
+        public IActionResult Search(string name)
+        {
+            Student Searchedstudent = _studentRepository.GetByName(name);
+
+            if (Searchedstudent == null)
+            {
+                TempData["Not Found Error"] = "Student not found.";
+                return RedirectToAction("ShowAll");
+            }
+
+            return View("Details", Searchedstudent);
         }
     }
 }

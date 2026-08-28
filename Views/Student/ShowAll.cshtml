@@ -2,14 +2,27 @@
 
 <a asp-controller="Student" asp-action="Add" class="btn btn-success">New</a>
 
+@if (TempData["Found"] != null)
+{
+    <div style="color: green">@TempData["Found"]</div>
+}
+
+<form asp-controller="Student" asp-action="Search" method="get">
+    <input type="text" name="name" placeholder="Search By Name" class="form-control" />
+    <button type="submit" class="btn btn-success btn-primary">Search</button>
+</form>
+@if (TempData["Not Found Error"] != null)
+{
+    <div style="color:red">@TempData["Not Found Error"]</div>
+}
 <table class="table-hover table-bordered table">
     <tr>
         <td>Name</td>
         <td>Grade</td>
     </tr>
-@foreach(var s in Model)
-{
-    <tr>
+    @foreach (var s in Model)
+    {
+        <tr>
             <td>@s.Name</td>
             <td>@s.Grade</td>
             <td><a asp-controller="Student" asp-action="Details" asp-route-id="@s.Id" class="btn btn-success">Details</a></td>
@@ -19,6 +32,6 @@
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>
-    </tr>
-}
+        </tr>
+    }
 </table>

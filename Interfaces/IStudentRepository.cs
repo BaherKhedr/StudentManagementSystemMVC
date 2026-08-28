@@ -9,5 +9,6 @@ namespace StudentManagementSystemMVC.Interfaces
         void Add(Student student);
         void Update(Student student);
         void Delete(Student student);
+        Student GetByName(string name);
     }
 }

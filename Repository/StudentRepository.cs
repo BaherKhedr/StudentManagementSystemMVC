@@ -31,6 +31,12 @@ namespace StudentManagementSystemMVC.Repository
             return student;
         }
 
+        public Student GetByName(string name)
+        {
+            Student student = _context.Students.FirstOrDefault(s => s.Name == name);
+            return student;
+        }
+
         public List<Student> ShowAll()
         {
             return _context.Students.ToList();
