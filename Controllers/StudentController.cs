@@ -33,14 +33,21 @@ namespace StudentManagementSystemMVC.Controllers
         [HttpPost]
         public IActionResult SaveAdd(Student student)
         {
+            if (student.Id.HasValue && ModelState["Id"]?.Errors.Count == 0)
+            {
+                var studentidDb = _studentRepository.GetById((int)student.Id);
+                if (studentidDb != null)
+                {
+                    ModelState.AddModelError("Not Found Error", "Student with this Id already exists.");
+                }
+            }
+
             if (ModelState.IsValid)
             {
-
                 _studentRepository.Add(student);
                 TempData["Found"] = "Student Added Successfully!";
                 return RedirectToAction("ShowAll");
             }
-
             return View("Add", student);
         }
         [HttpGet]
