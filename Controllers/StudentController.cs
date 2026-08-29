@@ -21,6 +21,8 @@ namespace StudentManagementSystemMVC.Controllers
         public IActionResult Details(int id)
         {
             var student = _studentRepository.GetById(id);
+            if (student == null)
+                return NotFound();
             return View("Details", student);
         }
         [HttpGet]
@@ -33,8 +35,9 @@ namespace StudentManagementSystemMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                TempData["Found"] = "Student Added Successfully!";
+
                 _studentRepository.Add(student);
+                TempData["Found"] = "Student Added Successfully!";
                 return RedirectToAction("ShowAll");
             }
 
@@ -63,7 +66,7 @@ namespace StudentManagementSystemMVC.Controllers
             var deletedstudent = _studentRepository.GetById(id);
 
             if (deletedstudent == null)
-                return NotFound("Student not found");
+                return NotFound();
 
             _studentRepository.Delete(deletedstudent);
             return RedirectToAction("ShowAll");
@@ -71,15 +74,40 @@ namespace StudentManagementSystemMVC.Controllers
 
         public IActionResult Search(string name)
         {
-            Student Searchedstudent = _studentRepository.GetByName(name);
+            List<Student> Searchedstudents = _studentRepository.GetByName(name);
 
-            if (Searchedstudent == null)
+            if (Searchedstudents.Count == 0)
             {
                 TempData["Not Found Error"] = "Student not found.";
                 return RedirectToAction("ShowAll");
             }
 
-            return View("Details", Searchedstudent);
+            return View("StudentList", Searchedstudents);
+        }
+
+        public IActionResult Sort(string option)
+        {
+            List<Student> sortedlist;
+            if (option == "Name")
+            {
+                sortedlist = _studentRepository.SortByName();
+                return View("StudentList", sortedlist);
+            }
+            else if (option == "Age")
+            {
+                sortedlist = _studentRepository.SortByAge();
+                return View("StudentList", sortedlist);
+            }
+            else if (option == "Grade")
+            {
+                sortedlist = _studentRepository.SortByGrade();
+                return View("StudentList", sortedlist);
+            }
+            else
+            {
+                TempData["Error"] = "Please Select an Option.";
+                return RedirectToAction("ShowAll");
+            }
         }
     }
 }

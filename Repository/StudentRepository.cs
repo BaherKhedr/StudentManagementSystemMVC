@@ -31,9 +31,9 @@ namespace StudentManagementSystemMVC.Repository
             return student;
         }
 
-        public Student GetByName(string name)
+        public List<Student> GetByName(string name)
         {
-            Student student = _context.Students.FirstOrDefault(s => s.Name == name);
+            List<Student> student = _context.Students.Where(s => s.Name == name).ToList();
             return student;
         }
 
@@ -49,6 +49,21 @@ namespace StudentManagementSystemMVC.Repository
             existingstudent.Age = student.Age;
             existingstudent.Grade = student.Grade;
             _context.SaveChanges();
+        }
+        public List<Student> SortByName()
+        {
+            List<Student> sortedstudentlist = _context.Students.OrderBy(s => s.Name).ToList();
+            return sortedstudentlist;
+        }
+        public List<Student> SortByAge()
+        {
+            List<Student> sortedstudentlist = _context.Students.OrderBy(s => s.Age).ToList();
+            return sortedstudentlist;
+        }
+        public List<Student> SortByGrade()
+        {
+            List<Student> sortedstudentlist = _context.Students.OrderByDescending(s => s.Grade).ToList();
+            return sortedstudentlist;
         }
     }
 }

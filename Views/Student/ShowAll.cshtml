@@ -1,6 +1,6 @@
 ﻿@model List<Student>
 
-<a asp-controller="Student" asp-action="Add" class="btn btn-success">New</a>
+<a asp-controller="Student" asp-action="Add" class="btn btn-success mb-3">New</a>
 
 @if (TempData["Found"] != null)
 {
@@ -8,17 +8,34 @@
 }
 
 <form asp-controller="Student" asp-action="Search" method="get">
-    <input type="text" name="name" placeholder="Search By Name" class="form-control" />
-    <button type="submit" class="btn btn-success btn-primary">Search</button>
+    <input type="text" name="name" placeholder="Search By Name" class="form-control mb-3" />
+    <button type="submit" class="btn btn-success mb-3">Search</button>
 </form>
+
 @if (TempData["Not Found Error"] != null)
 {
     <div style="color:red">@TempData["Not Found Error"]</div>
 }
-<table class="table-hover table-bordered table">
+
+<form asp-controller="Student" asp-action="Sort" method="get">
+    <select name="option" class="form-select mb-3">
+        <option value="" selected disabled>Choose sorting option...</option>
+        <option value="Name">Name</option>
+        <option value="Age">Age</option>
+        <option value="Grade">Grade</option>
+    </select>
+    <button type="submit" class="btn btn-success mb-3">Sort</button>
+</form>
+
+@if(TempData["Error"] != null)
+{
+    <div style="color:red">@TempData["Error"]</div>
+}
+
+<table class="table-hover table-bordered table mb-3">
     <tr>
-        <td>Name</td>
-        <td>Grade</td>
+        <th>Name</th>
+        <th>Grade</th>
     </tr>
     @foreach (var s in Model)
     {
