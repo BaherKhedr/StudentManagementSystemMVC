@@ -4,7 +4,6 @@ namespace StudentManagementSystemMVC.Models
 {
     public class Student
     {
-        [Required(ErrorMessage = "Please enter the Student's Id")]
         public int? Id { get; set; }
         [Required(ErrorMessage = "Please enter the Student's Name")]
         [RegularExpression(@"^[a-zA-Z ]+$" , ErrorMessage ="Please don't include numbers in the student's Name")]
