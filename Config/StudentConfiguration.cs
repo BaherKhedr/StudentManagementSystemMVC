@@ -10,8 +10,6 @@ namespace StudentManagementSystemMVC.Config
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Id).ValueGeneratedNever();
-
             builder.Property(s => s.Name).HasMaxLength(100).IsRequired();
 
         }
