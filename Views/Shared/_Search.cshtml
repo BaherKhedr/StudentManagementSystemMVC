@@ -1,0 +1,44 @@
+﻿
+<h1>Search</h1>
+
+<form asp-controller="Student" asp-action="Search" method="get">
+
+    <!-- Name -->
+    <label class="form-label">Name</label>
+    <div class="mb-3 ">
+        <input name="Name" type="text" class="form-control mb-3 mt-3" />
+    </div>
+
+    <!-- Age -->
+    <label class="form-label">Age</label>
+    <div class="d-flex gap-2 ">
+        <input name="AgeFrom" type="number" class="form-control mb-3 mt-3" placeholder="From" />
+        <input name="AgeTo" type="number" class="form-control mb-3 mt-3" placeholder="To" />
+    </div>
+    
+    <!-- Grade -->
+    <label class="form-label">Grade</label>
+    <div class="d-flex gap-2 ">
+        <input name="GradeFrom" type="number" class="form-control mb-3 mt-3" placeholder="From" />
+        <input name="GradeTo" type="number" class="form-control mb-3 mt-3" placeholder="To" />
+    </div>
+
+    <!-- Sort -->
+    <label class="form-label">Sort By:</label>
+    <div class="d-flex gap-2 ">
+        <select name="SortBy" class="form-select mb-3 mt-3">
+            <option value="" selected disabled>Choose sorting option...</option>
+            <option value="Id">Id</option>
+            <option value="Name">Name</option>
+            <option value="Age">Age</option>
+            <option value="Grade">Grade</option>
+        </select>
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex gap-2 ">
+        <button type="submit" class="btn btn-success mb-3 mt-3">Search</button>
+        <a asp-controller="Student" asp-action="ShowAll" class="btn btn-primary ">Clear</a>
+    </div>
+
+</form>

@@ -2,6 +2,7 @@
 using StudentManagementSystemMVC.Data;
 using StudentManagementSystemMVC.Interfaces;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using StudentManagementSystemMVC.ViewModels;
 
 namespace StudentManagementSystemMVC.Repository
 {
@@ -64,6 +65,49 @@ namespace StudentManagementSystemMVC.Repository
         {
             List<Student> sortedstudentlist = _context.Students.OrderByDescending(s => s.Grade).ToList();
             return sortedstudentlist;
+        }
+
+        public List<Student> Search(StudentSearchViewModel studentviewModel)
+        {
+            IQueryable<Student> students = _context.Students;
+            if (studentviewModel.Name != null)
+            {
+                students = students.Where(x => x.Name.Contains(studentviewModel.Name));
+            }
+            if (studentviewModel.AgeFrom != null)
+            {
+                students = students.Where(x => x.Age >= studentviewModel.AgeFrom);
+            }
+            if (studentviewModel.AgeTo != null)
+            {
+                students = students.Where(x => x.Age <= studentviewModel.AgeTo);
+            }
+            if (studentviewModel.GradeFrom != null)
+            {
+                students = students.Where(x => x.Grade >= studentviewModel.GradeFrom);
+            }
+            if (studentviewModel.GradeTo != null)
+            {
+                students = students.Where(x => x.Grade <= studentviewModel.GradeTo);
+            }
+            if (studentviewModel.SortBy == "Id")
+            {
+                students = students.OrderBy(x => x.Id);
+            }
+            else if (studentviewModel.SortBy == "Name")
+            {
+                students = students.OrderBy(x => x.Name);
+            }
+            else if (studentviewModel.SortBy == "Age")
+            {
+                students = students.OrderByDescending(x => x.Age);
+            }
+            else if (studentviewModel.SortBy == "Grade")
+            {
+                students = students.OrderByDescending(x => x.Grade);
+            }
+
+            return students.ToList();
         }
     }
 }

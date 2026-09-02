@@ -1,23 +1,27 @@
 ﻿@model List<Student>
 
-<a asp-controller="Student" asp-action="Add" class="btn btn-success mb-3">New</a>
+<a asp-controller="Student" asp-action="Add" class="btn btn-success mb-3">Add New Student</a>
 
 @if (TempData["Found"] != null)
 {
     <div style="color: green">@TempData["Found"]</div>
 }
 
-<form asp-controller="Student" asp-action="Search" method="get">
+@* OLD SEARCH
+    <form asp-controller="Student" asp-action="Search" method="get">
     <input type="text" name="name" placeholder="Search By Name" class="form-control mb-3" />
     <button type="submit" class="btn btn-success mb-3">Search</button>
-</form>
+</form> *@
 
-@if (TempData["Not Found Error"] != null)
+@* @if (TempData["Not Found Error"] != null)
 {
     <div style="color:red">@TempData["Not Found Error"]</div>
-}
+} *@
 
-<form asp-controller="Student" asp-action="Sort" method="get">
+<partial name="_Search" />
+
+@* OLD SORT
+    <form asp-controller="Student" asp-action="Sort" method="get">
     <select name="option" class="form-select mb-3">
         <option value="" selected disabled>Choose sorting option...</option>
         <option value="Name">Name</option>
@@ -30,7 +34,9 @@
 @if(TempData["Error"] != null)
 {
     <div style="color:red">@TempData["Error"]</div>
-}
+} *@
+
+<h1>All Students</h1>
 
 <table class="table-hover table-bordered table mb-3">
     <tr>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StudentManagementSystemMVC.Models;
 using StudentManagementSystemMVC.Interfaces;
+using StudentManagementSystemMVC.ViewModels;
 
 namespace StudentManagementSystemMVC.Controllers
 {
@@ -79,17 +80,11 @@ namespace StudentManagementSystemMVC.Controllers
             return RedirectToAction("ShowAll");
         }
 
-        public IActionResult Search(string name)
+        public IActionResult Search(StudentSearchViewModel viewModel)
         {
-            List<Student> Searchedstudents = _studentRepository.GetByName(name);
+            var students = _studentRepository.Search(viewModel);
 
-            if (Searchedstudents.Count == 0)
-            {
-                TempData["Not Found Error"] = "Student not found.";
-                return RedirectToAction("ShowAll");
-            }
-
-            return View("StudentList", Searchedstudents);
+            return View("StudentList" , students);
         }
 
         public IActionResult Sort(string option)

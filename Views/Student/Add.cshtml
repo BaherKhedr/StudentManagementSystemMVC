@@ -3,10 +3,6 @@
 <form asp-controller="Student" asp-action="SaveAdd" method="post">
     <div asp-validation-summary="All" style="color: red"></div>
     <div>
-        <label>Id</label>
-        <input asp-for="Id" class="form-control" value="@Model?.Id" />
-    </div>
-    <div>
         <label>Name</label>
         <input asp-for="Name" class="form-control" value="@Model?.Name" />
     </div>

@@ -1,4 +1,5 @@
 ﻿using StudentManagementSystemMVC.Models;
+using StudentManagementSystemMVC.ViewModels;
 
 namespace StudentManagementSystemMVC.Interfaces
 {
@@ -13,5 +14,6 @@ namespace StudentManagementSystemMVC.Interfaces
         List<Student> SortByName();
         List<Student> SortByAge();
         List<Student> SortByGrade();
+        List<Student> Search(StudentSearchViewModel studentviewModel);
     }
 }
