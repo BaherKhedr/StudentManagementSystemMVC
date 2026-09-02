@@ -11,7 +11,7 @@ using StudentManagementSystemMVC.Data;
 namespace StudentManagementSystemMVC.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260824194140_initial")]
+    [Migration("20260902140718_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -24,10 +24,13 @@ namespace StudentManagementSystemMVC.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StudentManagementMVC.Models.Student", b =>
+            modelBuilder.Entity("StudentManagementSystemMVC.Models.Student", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -37,7 +40,8 @@ namespace StudentManagementSystemMVC.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
