@@ -11,9 +11,8 @@ namespace StudentManagementSystemMVC.Interfaces
         void Update(Student student);
         void Delete(Student student);
         List<Student> GetByName(string name);
-        List<Student> SortByName();
-        List<Student> SortByAge();
-        List<Student> SortByGrade();
         List<Student> Search(StudentSearchViewModel studentviewModel);
+        int GetTotalStudentsCount();
+        List<Student> Pagination(PaginationViewModel viewModel);
     }
 }

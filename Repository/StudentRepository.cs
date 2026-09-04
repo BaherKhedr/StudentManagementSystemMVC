@@ -3,6 +3,7 @@ using StudentManagementSystemMVC.Data;
 using StudentManagementSystemMVC.Interfaces;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using StudentManagementSystemMVC.ViewModels;
+using System.Security.Cryptography.Pkcs;
 
 namespace StudentManagementSystemMVC.Repository
 {
@@ -51,21 +52,6 @@ namespace StudentManagementSystemMVC.Repository
             existingstudent.Grade = student.Grade;
             _context.SaveChanges();
         }
-        public List<Student> SortByName()
-        {
-            List<Student> sortedstudentlist = _context.Students.OrderBy(s => s.Name).ToList();
-            return sortedstudentlist;
-        }
-        public List<Student> SortByAge()
-        {
-            List<Student> sortedstudentlist = _context.Students.OrderBy(s => s.Age).ToList();
-            return sortedstudentlist;
-        }
-        public List<Student> SortByGrade()
-        {
-            List<Student> sortedstudentlist = _context.Students.OrderByDescending(s => s.Grade).ToList();
-            return sortedstudentlist;
-        }
 
         public List<Student> Search(StudentSearchViewModel studentviewModel)
         {
@@ -108,6 +94,17 @@ namespace StudentManagementSystemMVC.Repository
             }
 
             return students.ToList();
+        }
+
+        public int GetTotalStudentsCount()
+        {
+            return _context.Students.Count();
+        }
+
+        public List<Student> Pagination(PaginationViewModel viewModel)
+        {
+            IQueryable<Student> students = _context.Students;
+            return students.OrderBy(s =>s.Id).Skip((viewModel.CurrentPage -1) * viewModel.PageSize).Take(viewModel.PageSize).ToList();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model List<Student>
+﻿@model ShowAllViewModel
 
 <a asp-controller="Student" asp-action="Add" class="btn btn-success mb-3">Add New Student</a>
 
@@ -7,54 +7,60 @@
     <div style="color: green">@TempData["Found"]</div>
 }
 
-@* OLD SEARCH
-    <form asp-controller="Student" asp-action="Search" method="get">
-    <input type="text" name="name" placeholder="Search By Name" class="form-control mb-3" />
-    <button type="submit" class="btn btn-success mb-3">Search</button>
-</form> *@
-
-@* @if (TempData["Not Found Error"] != null)
-{
-    <div style="color:red">@TempData["Not Found Error"]</div>
-} *@
-
 <partial name="_Search" />
-
-@* OLD SORT
-    <form asp-controller="Student" asp-action="Sort" method="get">
-    <select name="option" class="form-select mb-3">
-        <option value="" selected disabled>Choose sorting option...</option>
-        <option value="Name">Name</option>
-        <option value="Age">Age</option>
-        <option value="Grade">Grade</option>
-    </select>
-    <button type="submit" class="btn btn-success mb-3">Sort</button>
-</form>
-
-@if(TempData["Error"] != null)
-{
-    <div style="color:red">@TempData["Error"]</div>
-} *@
 
 <h1>All Students</h1>
 
-<table class="table-hover table-bordered table mb-3">
-    <tr>
-        <th>Name</th>
-        <th>Grade</th>
-    </tr>
-    @foreach (var s in Model)
-    {
-        <tr>
-            <td>@s.Name</td>
-            <td>@s.Grade</td>
-            <td><a asp-controller="Student" asp-action="Details" asp-route-id="@s.Id" class="btn btn-success">Details</a></td>
-            <td><a asp-controller="Student" asp-action="Edit" asp-route-id="@s.Id" class="btn btn-success">Edit</a></td>
-            <td>
-                <form asp-controller="Student" asp-action="Delete" asp-route-id="@s.Id" method="post">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-            </td>
-        </tr>
+<div id="studentlist">
+    <partial name="_StudentList" model="Model.Students" />
+</div>
+
+<div id="pagination">
+    <partial name="_Pagination" model="Model.Pagination" />
+</div>
+
+<script>
+    function setupPaginationLinks() {
+        const paginationLinks = document.querySelectorAll(".pagination-link");
+
+        for (let i = 0; i < paginationLinks.length; i++) {
+            const link = paginationLinks[i];
+
+            link.addEventListener("click", function(event) {
+
+                event.preventDefault();
+
+                const url = link.href;
+
+                fetch(url)
+                    .then(function(response) {
+                        return response.text();
+                    })
+                    .then(function(html) {
+                        console.log(html);
+
+                        const studentslist = document.querySelector("#studentlist");
+
+                        const pagination = document.querySelector("#pagination");
+
+                        const parser = new DOMParser();
+
+                        const doc = parser.parseFromString(html, "text/html");
+
+                        const newstudentslist = doc.querySelector(".students-table");
+
+                        const newpagination = doc.querySelector(".pagination-container");
+
+                        studentslist.innerHTML = newstudentslist.outerHTML;
+
+                        pagination.innerHTML = newpagination.outerHTML;
+
+                        setupPaginationLinks();
+                    });
+
+            });
+        }
     }
-</table>
+    setupPaginationLinks();
+
+</script>

@@ -15,8 +15,15 @@ namespace StudentManagementSystemMVC.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
-            List<Student> students = _studentRepository.ShowAll();
-            return View("ShowAll", students);
+            PaginationViewModel paginationViewModel = new PaginationViewModel();
+            paginationViewModel.TotalItems = _studentRepository.GetTotalStudentsCount();
+            List<Student> students = _studentRepository.Pagination(paginationViewModel);
+            ShowAllViewModel showAllViewModel = new ShowAllViewModel
+            {
+                Students = students,
+                Pagination = paginationViewModel
+            };
+            return View("ShowAll", showAllViewModel);
         }
         [HttpGet]
         public IActionResult Details(int id)
@@ -87,29 +94,19 @@ namespace StudentManagementSystemMVC.Controllers
             return View("StudentList" , students);
         }
 
-        public IActionResult Sort(string option)
+        public IActionResult Pagination(PaginationViewModel viewModel)
         {
-            List<Student> sortedlist;
-            if (option == "Name")
+            viewModel.TotalItems = _studentRepository.GetTotalStudentsCount();
+            List<Student> students = _studentRepository.Pagination(viewModel);
+
+            ShowAllViewModel showAllViewModel = new ShowAllViewModel
             {
-                sortedlist = _studentRepository.SortByName();
-                return View("StudentList", sortedlist);
-            }
-            else if (option == "Age")
-            {
-                sortedlist = _studentRepository.SortByAge();
-                return View("StudentList", sortedlist);
-            }
-            else if (option == "Grade")
-            {
-                sortedlist = _studentRepository.SortByGrade();
-                return View("StudentList", sortedlist);
-            }
-            else
-            {
-                TempData["Error"] = "Please Select an Option.";
-                return RedirectToAction("ShowAll");
-            }
+                Students = students,
+                Pagination = viewModel
+            };
+
+            return PartialView("_PaginationResult", showAllViewModel);
         }
+        
     }
 }
