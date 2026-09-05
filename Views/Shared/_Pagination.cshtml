@@ -1,19 +1,46 @@
-﻿@model PaginationViewModel
+﻿@model ShowAllViewModel
 
 <nav aria-label="Page navigation example" class="pagination-container">
     <ul class="pagination">
-        @if(Model.CurrentPage > 1)
+        @if (Model.Pagination.CurrentPage > 1)
         {
-            <li class="page-item"><a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@(Model.CurrentPage - 1)" class="page-link pagination-link">Previous</a></li>
+            <li class="page-item">
+                <a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@(Model.Pagination.CurrentPage - 1)"
+                   asp-route-Name="@Model.Search.Name"
+                   asp-route-AgeFrom="@Model.Search.AgeFrom"
+                   asp-route-AgeTo="@Model.Search.AgeTo"
+                   asp-route-GradeFrom="@Model.Search.GradeFrom"
+                   asp-route-GradeTo="@Model.Search.GradeTo"
+                   asp-route-SortBy="@Model.Search.SortBy"
+                   class="page-link pagination-link">Previous</a>
+            </li>
         }
-        @for(int i = 1; i <= Model.TotalPages; i++)
+        @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
         {
-            <li class="page-item"><a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@i" class="page-link pagination-link">@i</a></li>
+            <li class="page-item">
+                <a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@i"
+                   asp-route-Name="@Model.Search.Name"
+                   asp-route-AgeFrom="@Model.Search.AgeFrom"
+                   asp-route-AgeTo="@Model.Search.AgeTo"
+                   asp-route-GradeFrom="@Model.Search.GradeFrom"
+                   asp-route-GradeTo="@Model.Search.GradeTo"
+                   asp-route-SortBy="@Model.Search.SortBy"
+                   class="page-link @(i == Model.Pagination.CurrentPage ? "active" : "") pagination-link">@i</a>
+            </li>
         }
-        
-        @if(Model.CurrentPage < Model.TotalPages)
+
+        @if (Model.Pagination.CurrentPage < Model.Pagination.TotalPages)
         {
-            <li class="page-item"><a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@(Model.CurrentPage + 1)" class="page-link pagination-link">Next</a></li>
+            <li class="page-item">
+                <a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@(Model.Pagination.CurrentPage + 1)"
+                   asp-route-Name="@Model.Search.Name"
+                   asp-route-AgeFrom="@Model.Search.AgeFrom"
+                   asp-route-AgeTo="@Model.Search.AgeTo"
+                   asp-route-GradeFrom="@Model.Search.GradeFrom"
+                   asp-route-GradeTo="@Model.Search.GradeTo"
+                   asp-route-SortBy="@Model.Search.SortBy"
+                   class="page-link pagination-link">Next</a>
+            </li>
         }
 
     </ul>

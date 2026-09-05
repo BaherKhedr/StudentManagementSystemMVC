@@ -14,7 +14,14 @@ namespace StudentManagementSystemMVC.Repository
         {
             _context = context;
         }
-
+        public int GetTotalStudentsCount()
+        {
+            return _context.Students.Count();
+        }
+        public int GetStudentsCount(List<Student> students)
+        {
+            return students.Count;
+        }
         public void Add(Student student)
         {
             _context.Students.Add(student);
@@ -53,7 +60,7 @@ namespace StudentManagementSystemMVC.Repository
             _context.SaveChanges();
         }
 
-        public List<Student> Search(StudentSearchViewModel studentviewModel)
+        public IQueryable<Student> Filter(StudentSearchViewModel studentviewModel)
         {
             IQueryable<Student> students = _context.Students;
             if (studentviewModel.Name != null)
@@ -93,18 +100,21 @@ namespace StudentManagementSystemMVC.Repository
                 students = students.OrderByDescending(x => x.Grade);
             }
 
-            return students.ToList();
+            return students;
+        }
+        public int GetStudentsCount(StudentSearchViewModel viewModel)
+        {
+            return Filter(viewModel).Count();
+        }
+        public List<Student> Search(StudentSearchViewModel studentviewModel)
+        {
+            return Filter(studentviewModel).ToList();
         }
 
-        public int GetTotalStudentsCount()
+        public List<Student> Pagination(StudentSearchViewModel viewModel)
         {
-            return _context.Students.Count();
-        }
-
-        public List<Student> Pagination(PaginationViewModel viewModel)
-        {
-            IQueryable<Student> students = _context.Students;
-            return students.OrderBy(s =>s.Id).Skip((viewModel.CurrentPage -1) * viewModel.PageSize).Take(viewModel.PageSize).ToList();
+            IQueryable<Student> students = Filter(viewModel);
+            return students.Skip((viewModel.CurrentPage -1) * viewModel.PageSize).Take(viewModel.PageSize).ToList();
         }
     }
 }

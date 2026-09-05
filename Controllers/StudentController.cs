@@ -15,13 +15,15 @@ namespace StudentManagementSystemMVC.Controllers
         [HttpGet]
         public IActionResult ShowAll()
         {
+            StudentSearchViewModel searchViewModel = new StudentSearchViewModel();
             PaginationViewModel paginationViewModel = new PaginationViewModel();
             paginationViewModel.TotalItems = _studentRepository.GetTotalStudentsCount();
-            List<Student> students = _studentRepository.Pagination(paginationViewModel);
+            List<Student> students = _studentRepository.Pagination(searchViewModel);
             ShowAllViewModel showAllViewModel = new ShowAllViewModel
             {
                 Students = students,
-                Pagination = paginationViewModel
+                Pagination = paginationViewModel,
+                Search = searchViewModel
             };
             return View("ShowAll", showAllViewModel);
         }
@@ -87,26 +89,51 @@ namespace StudentManagementSystemMVC.Controllers
             return RedirectToAction("ShowAll");
         }
 
-        public IActionResult Search(StudentSearchViewModel viewModel)
+        public IActionResult Search(StudentSearchViewModel searchViewModel)
         {
-            var students = _studentRepository.Search(viewModel);
+            if (ModelState.IsValid)
+            {
+                List<Student> students = _studentRepository.Pagination(searchViewModel);
 
-            return View("StudentList" , students);
+                PaginationViewModel paginationViewModel = new PaginationViewModel
+                {
+                    CurrentPage = searchViewModel.CurrentPage,
+                    PageSize = searchViewModel.PageSize,
+                    TotalItems = _studentRepository.GetStudentsCount(searchViewModel)
+                };
+
+                ShowAllViewModel showAllViewModel = new ShowAllViewModel
+                {
+                    Students = students,
+                    Pagination = paginationViewModel,
+                    Search = searchViewModel
+                };
+
+                return View("Search", showAllViewModel);
+            }
+
+            return RedirectToAction("ShowAll");
         }
 
-        public IActionResult Pagination(PaginationViewModel viewModel)
+        public IActionResult Pagination(StudentSearchViewModel searchViewModel)
         {
-            viewModel.TotalItems = _studentRepository.GetTotalStudentsCount();
-            List<Student> students = _studentRepository.Pagination(viewModel);
+            PaginationViewModel paginationViewModel = new PaginationViewModel
+            {
+                CurrentPage = searchViewModel.CurrentPage,
+                PageSize = searchViewModel.PageSize,
+                TotalItems = _studentRepository.GetStudentsCount(searchViewModel),
+            };
+            List<Student> students = _studentRepository.Pagination(searchViewModel);
 
             ShowAllViewModel showAllViewModel = new ShowAllViewModel
             {
                 Students = students,
-                Pagination = viewModel
+                Pagination = paginationViewModel,
+                Search = searchViewModel
             };
 
             return PartialView("_PaginationResult", showAllViewModel);
         }
-        
+
     }
 }

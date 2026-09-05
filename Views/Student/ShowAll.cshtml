@@ -7,7 +7,7 @@
     <div style="color: green">@TempData["Found"]</div>
 }
 
-<partial name="_Search" />
+<partial name="_Search" model="Model"/>
 
 <h1>All Students</h1>
 
@@ -16,7 +16,7 @@
 </div>
 
 <div id="pagination">
-    <partial name="_Pagination" model="Model.Pagination" />
+    <partial name="_Pagination" model="Model" />
 </div>
 
 <script>
@@ -27,7 +27,6 @@
             const link = paginationLinks[i];
 
             link.addEventListener("click", function(event) {
-
                 event.preventDefault();
 
                 const url = link.href;
@@ -37,27 +36,20 @@
                         return response.text();
                     })
                     .then(function(html) {
-                        console.log(html);
-
                         const studentslist = document.querySelector("#studentlist");
-
                         const pagination = document.querySelector("#pagination");
 
                         const parser = new DOMParser();
-
                         const doc = parser.parseFromString(html, "text/html");
 
                         const newstudentslist = doc.querySelector(".students-table");
-
                         const newpagination = doc.querySelector(".pagination-container");
 
                         studentslist.innerHTML = newstudentslist.outerHTML;
-
                         pagination.innerHTML = newpagination.outerHTML;
 
                         setupPaginationLinks();
                     });
-
             });
         }
     }

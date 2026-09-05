@@ -4,12 +4,14 @@
 <table class="table-hover table-bordered table mb-3 students-table">
     <tr>
         <th>Name</th>
+        <th>Age</th>
         <th>Grade</th>
     </tr>
     @foreach (var s in Model)
     {
         <tr>
             <td>@s.Name</td>
+            <td>@s.Age</td>
             <td>@s.Grade</td>
             <td><a asp-controller="Student" asp-action="Details" asp-route-id="@s.Id" class="btn btn-success">Details</a></td>
             <td><a asp-controller="Student" asp-action="Edit" asp-route-id="@s.Id" class="btn btn-success">Edit</a></td>

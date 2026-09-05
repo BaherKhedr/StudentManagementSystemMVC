@@ -1,0 +1,46 @@
+﻿@model ShowAllViewModel
+
+<div id="studentlist">
+    <partial name="_StudentList" model="Model.Students" />
+</div>
+
+<div id="Pagination">
+    <partial name="_Pagination" model="Model" />
+</div>
+
+<script>
+    function PaginationLinks() {
+        const paginationlinks = document.querySelectorAll(".pagination-link");
+
+        for (let i = 0; i < paginationlinks.length; i++) {
+            const link = paginationlinks[i];
+
+            link.addEventListener("click", function(event) {
+                event.preventDefault();
+
+                const url = link.href;
+
+                fetch(url)
+                    .then(function(response) {
+                        return response.text();
+                    })
+                    .then(function(html) {
+                        const studentlist = document.querySelector("#studentlist");
+                        const pagination = document.querySelector("#Pagination");
+
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, "text/html");
+
+                        const newstudentlist = doc.querySelector(".students-table");
+                        const newpagination = doc.querySelector(".pagination-container");
+
+                        studentlist.innerHTML = newstudentlist.outerHTML;
+                        pagination.innerHTML = newpagination.outerHTML;
+
+                        PaginationLinks();
+                    });
+            });
+        }
+    }
+    PaginationLinks();
+</script>
