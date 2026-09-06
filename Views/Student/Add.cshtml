@@ -16,3 +16,7 @@
     </div>
     <button type="submit" class="btn btn-success mb-3 mt-3">Add</button>
 </form>
+@if (TempData["Found"] != null)
+{
+    <div style="color: green">@TempData["Found"]</div>
+}

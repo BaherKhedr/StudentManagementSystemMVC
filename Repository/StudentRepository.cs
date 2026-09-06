@@ -39,13 +39,18 @@ namespace StudentManagementSystemMVC.Repository
             var student = _context.Students.FirstOrDefault(x => x.Id == id);
             return student;
         }
-
-        public List<Student> GetByName(string name)
+        public Student GetHighestGrade()
         {
-            List<Student> student = _context.Students.Where(s => s.Name == name).ToList();
-            return student;
+            return _context.Students.OrderByDescending(x => x.Grade).FirstOrDefault();
         }
-
+        public Student GetLowestGrade()
+        {
+            return _context.Students.OrderBy(x => x.Grade).FirstOrDefault();
+        }
+        public double GetAverageGrade()
+        {
+            return (double)_context.Students.Average(x => x.Grade);
+        }
         public List<Student> ShowAll()
         {
             return _context.Students.ToList();
@@ -106,15 +111,24 @@ namespace StudentManagementSystemMVC.Repository
         {
             return Filter(viewModel).Count();
         }
-        public List<Student> Search(StudentSearchViewModel studentviewModel)
-        {
-            return Filter(studentviewModel).ToList();
-        }
 
         public List<Student> Pagination(StudentSearchViewModel viewModel)
         {
             IQueryable<Student> students = Filter(viewModel);
-            return students.Skip((viewModel.CurrentPage -1) * viewModel.PageSize).Take(viewModel.PageSize).ToList();
+
+            return students.Skip((viewModel.CurrentPage - 1) * viewModel.PageSize).Take(viewModel.PageSize).ToList();
+        }
+        public List<Student> GetFailedStudents()
+        {
+            
+            List<Student> students = _context.Students.Where(x => x.Grade < 50).ToList();
+            return students;
+        }
+        public List<Student> GetPassedStudents()
+        {
+            List<Student> students = _context.Students.Where(x => x.Grade >= 50).ToList();
+
+            return students;
         }
     }
 }

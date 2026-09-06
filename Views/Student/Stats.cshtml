@@ -1,0 +1,36 @@
+﻿<a asp-controller="Student" asp-action="GetHighestGrade" class="btn btn-primary mt-2 mb2 OneRowHighest">Get Highest Grade</a>
+<div id="HighestGrade">
+</div>
+
+<a asp-controller="Student" asp-action="GetAverageGrade" class="btn btn-secondary mt-2 mb2 OneRowAverage">Get Average Grade</a>
+<div id="AverageGrade">
+</div>
+
+<div>
+    <a asp-controller="Student" asp-action="GetLowestGrade" class="btn mt-2 mb2 btn-danger OneRowLowest">Get Lowest Grade</a>
+    <div id="LowestGrade">
+    </div>
+</div>
+
+<a asp-controller="Student" asp-action="GetPassedStudents" class="btn btn-primary mt-2 mb2 MoreRowsPassed">Get Passed Students</a>
+<div id="PassedStudents">
+</div>
+<div id="PassedPagination">
+</div>
+
+<a asp-controller="Student" asp-action="GetFailedStudents" class="btn btn-danger mt-2 mb2 MoreRowsFailed">Get Failed Students</a>
+<div id="FailedStudents">
+</div>
+<div id="FailedPagination">
+</div>
+
+@section Scripts {
+    <script>
+        LinkwithOneRowOutPut("HighestGrade", "OneRowHighest");
+        LinkwithOneRowOutPut("LowestGrade", "OneRowLowest");
+        LinkwithOneRowOutPut("AverageGrade", "OneRowAverage");
+
+        LinkwithMoreThanOneRowOutPut("PassedStudents", "PassedPagination", "MoreRowsPassed");
+        LinkwithMoreThanOneRowOutPut("FailedStudents", "FailedPagination", "MoreRowsFailed");
+    </script>
+}

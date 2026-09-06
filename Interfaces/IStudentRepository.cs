@@ -9,13 +9,16 @@ namespace StudentManagementSystemMVC.Interfaces
         int GetStudentsCount(List<Student> students);
         List<Student> ShowAll();
         Student GetById(int id);
+        public Student GetHighestGrade();
+        public Student GetLowestGrade();
+        double GetAverageGrade();
+        List<Student> GetPassedStudents();
+        List<Student> GetFailedStudents();
         void Add(Student student);
         void Update(Student student);
         void Delete(Student student);
-        List<Student> GetByName(string name);
         IQueryable<Student> Filter(StudentSearchViewModel studentviewModel);
         int GetStudentsCount(StudentSearchViewModel viewModel);
-        List<Student> Search(StudentSearchViewModel studentviewModel);
         List<Student> Pagination(StudentSearchViewModel viewModel);
         
     }

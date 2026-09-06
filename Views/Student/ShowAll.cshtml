@@ -1,14 +1,5 @@
 ﻿@model ShowAllViewModel
 
-<a asp-controller="Student" asp-action="Add" class="btn btn-success mb-3">Add New Student</a>
-
-@if (TempData["Found"] != null)
-{
-    <div style="color: green">@TempData["Found"]</div>
-}
-
-<partial name="_Search" model="Model"/>
-
 <h1>All Students</h1>
 
 <div id="studentlist">
@@ -16,43 +7,10 @@
 </div>
 
 <div id="pagination">
-    <partial name="_Pagination" model="Model" />
+    <partial name="_Pagination" model="Model"/>
 </div>
-
+@section Scripts{
 <script>
-    function setupPaginationLinks() {
-        const paginationLinks = document.querySelectorAll(".pagination-link");
-
-        for (let i = 0; i < paginationLinks.length; i++) {
-            const link = paginationLinks[i];
-
-            link.addEventListener("click", function(event) {
-                event.preventDefault();
-
-                const url = link.href;
-
-                fetch(url)
-                    .then(function(response) {
-                        return response.text();
-                    })
-                    .then(function(html) {
-                        const studentslist = document.querySelector("#studentlist");
-                        const pagination = document.querySelector("#pagination");
-
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, "text/html");
-
-                        const newstudentslist = doc.querySelector(".students-table");
-                        const newpagination = doc.querySelector(".pagination-container");
-
-                        studentslist.innerHTML = newstudentslist.outerHTML;
-                        pagination.innerHTML = newpagination.outerHTML;
-
-                        setupPaginationLinks();
-                    });
-            });
-        }
-    }
-    setupPaginationLinks();
-
+    setupPaginationLinks("studentlist", "pagination");
 </script>
+}

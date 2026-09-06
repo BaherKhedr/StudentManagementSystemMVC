@@ -1,0 +1,21 @@
+﻿@model Student
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Grade</th>
+    </tr>
+    <tr>
+        <td>@Model.Id</td>
+        <td>@Model.Name</td>
+        <td>@Model.Age</td>
+        <td>@Model.Grade</td>
+        <td>
+            <form asp-controller="Student" asp-action="ConfirmDelete" asp-route-id="@Model.Id" method="post">
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>

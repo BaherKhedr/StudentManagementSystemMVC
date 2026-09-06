@@ -16,9 +16,7 @@
             <td><a asp-controller="Student" asp-action="Details" asp-route-id="@s.Id" class="btn btn-success">Details</a></td>
             <td><a asp-controller="Student" asp-action="Edit" asp-route-id="@s.Id" class="btn btn-success">Edit</a></td>
             <td>
-                <form asp-controller="Student" asp-action="Delete" asp-route-id="@s.Id" method="post">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+                <a asp-controller="Student" asp-action="Delete" asp-route-id="@s.Id" class="btn btn-danger">Delete</a>
             </td>
         </tr>
     }

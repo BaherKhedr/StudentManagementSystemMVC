@@ -1,46 +1,59 @@
 ﻿@model ShowAllViewModel
 
-<div id="studentlist">
-    <partial name="_StudentList" model="Model.Students" />
+<h1>Search</h1>
+
+<form asp-controller="Student" asp-action="Pagination" method="get" class="form">
+
+    <!-- Name -->
+    <label class="form-label">Name</label>
+    <div class="mb-2">
+        <input name="Name" type="text" class="form-control mt-2" />
+    </div>
+
+    <!-- Age -->
+    <label class="form-label">Age</label>
+    <div class="d-flex gap-2 ">
+        <input name="AgeFrom" type="number" class="form-control mb-2 mt-2" placeholder="From" />
+        <input name="AgeTo" type="number" class="form-control mb-2 mt-2" placeholder="To" />
+    </div>
+
+    <!-- Grade -->
+    <label class="form-label">Grade</label>
+    <div class="d-flex gap-2 ">
+        <input name="GradeFrom" type="number" class="form-control mb-2 mt-2" placeholder="From" />
+        <input name="GradeTo" type="number" class="form-control mb-2 mt-2" placeholder="To" />
+    </div>
+
+    <!-- Sort -->
+    <label class="form-label">Sort By:</label>
+    <div class="d-flex gap-2 ">
+        <select name="SortBy" class="form-select mb-2 mt-2">
+            <option value="" selected disabled>Choose sorting option...</option>
+            <option value="Id">Id</option>
+            <option value="Name">Name</option>
+            <option value="Age">Age</option>
+            <option value="Grade">Grade</option>
+        </select>
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex gap-2 ">
+        <button type="submit" class="btn btn-success mb-3 mt-3">Search</button>
+        <a asp-controller="Student" asp-action="Search" class="btn btn-primary">Clear</a>
+    </div>
+
+</form>
+
+<div id="div1">
+
 </div>
 
-<div id="Pagination">
-    <partial name="_Pagination" model="Model" />
+<div id="div2">
+
 </div>
 
+@section Scripts{
 <script>
-    function PaginationLinks() {
-        const paginationlinks = document.querySelectorAll(".pagination-link");
-
-        for (let i = 0; i < paginationlinks.length; i++) {
-            const link = paginationlinks[i];
-
-            link.addEventListener("click", function(event) {
-                event.preventDefault();
-
-                const url = link.href;
-
-                fetch(url)
-                    .then(function(response) {
-                        return response.text();
-                    })
-                    .then(function(html) {
-                        const studentlist = document.querySelector("#studentlist");
-                        const pagination = document.querySelector("#Pagination");
-
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, "text/html");
-
-                        const newstudentlist = doc.querySelector(".students-table");
-                        const newpagination = doc.querySelector(".pagination-container");
-
-                        studentlist.innerHTML = newstudentlist.outerHTML;
-                        pagination.innerHTML = newpagination.outerHTML;
-
-                        PaginationLinks();
-                    });
-            });
-        }
-    }
-    PaginationLinks();
+    PaginationForForm("form" , "div1" , "div2");
 </script>
+}
