@@ -13,19 +13,22 @@ public class StudentController : Controller
         _studentRepository = studentRepository;
     }
     [HttpGet]
-    public IActionResult ShowAll()
+    public IActionResult MainMenu()
     {
         StudentSearchViewModel searchViewModel = new StudentSearchViewModel();
-        PaginationViewModel paginationViewModel = new PaginationViewModel();
-        paginationViewModel.TotalItems = _studentRepository.GetTotalStudentsCount();
+        PaginationViewModel paginationViewModel = new PaginationViewModel
+        {
+            TotalItems = _studentRepository.GetTotalStudentsCount(),
+            ActionName = "MainMenu"
+        };
         List<Student> students = _studentRepository.Pagination(searchViewModel);
-        ShowAllViewModel showAllViewModel = new ShowAllViewModel
+        StudentListViewModel studentListViewModel = new StudentListViewModel
         {
             Students = students,
             Pagination = paginationViewModel,
             Search = searchViewModel
         };
-        return View("ShowAll", showAllViewModel);
+        return View("MainMenu", studentListViewModel);
     }
     [HttpGet]
     public IActionResult Details(int id)
@@ -33,7 +36,7 @@ public class StudentController : Controller
         var student = _studentRepository.GetById(id);
         if (student == null)
             return NotFound();
-        return View("Details", student);
+        return PartialView("Details", student);
     }
     [HttpGet]
     public IActionResult Add()
@@ -41,15 +44,14 @@ public class StudentController : Controller
         return View("Add");
     }
     [HttpPost]
-    public IActionResult SaveAdd(Student student)
+    public IActionResult Save(Student student)
     {
         if (ModelState.IsValid)
         {
             _studentRepository.Add(student);
-            TempData["Found"] = "Student Added Successfully!";
-            return View("Add");
+            return PartialView("_Student",student);
         }
-        return View("Add", student);
+        return PartialView("_StudentValidation", student);
     }
     [HttpGet]
     public IActionResult Edit(int id)
@@ -58,15 +60,15 @@ public class StudentController : Controller
         return View("Edit", student);
     }
     [HttpPost]
-    public IActionResult SaveEdit(Student student)
+    public IActionResult Update(Student student)
     {
         if (ModelState.IsValid)
         {
             _studentRepository.Update(student);
-            return RedirectToAction("ShowAll");
+            return PartialView("_Student", student);
         }
 
-        return View("Edit", student);
+        return PartialView("_StudentValidation", student);
     }
     [HttpGet]
     public IActionResult Delete(int id)
@@ -87,66 +89,83 @@ public class StudentController : Controller
             return NotFound();
 
         _studentRepository.Delete(deletedstudent);
-        return RedirectToAction("ShowAll");
+        return RedirectToAction("MainMenu");
     }
     public IActionResult Stats()
     {
         return View("Stats");
     }
-    public IActionResult Search(StudentSearchViewModel searchViewModel)
+    public IActionResult Search()
     {
-        if (ModelState.IsValid)
-        {
-            List<Student> students = _studentRepository.Pagination(searchViewModel);
+            return View("Search");
+    }
 
+    public IActionResult SearchResult(StudentSearchViewModel searchViewModel)
+    {
+        if(ModelState.IsValid)
+        {
             PaginationViewModel paginationViewModel = new PaginationViewModel
             {
                 CurrentPage = searchViewModel.CurrentPage,
                 PageSize = searchViewModel.PageSize,
                 TotalItems = _studentRepository.GetStudentsCount(searchViewModel)
             };
+            List<Student> students = _studentRepository.Pagination(searchViewModel);
 
-            ShowAllViewModel showAllViewModel = new ShowAllViewModel
+            StudentListViewModel studentListViewModel = new StudentListViewModel
             {
                 Students = students,
                 Pagination = paginationViewModel,
                 Search = searchViewModel
             };
 
-            return View("Search", showAllViewModel);
+            return PartialView("_StudentResult", studentListViewModel);
         }
-
-        return RedirectToAction("ShowAll");
-    }
-
-    public IActionResult Pagination(StudentSearchViewModel searchViewModel)
-    {
-        PaginationViewModel paginationViewModel = new PaginationViewModel
-        {
-            CurrentPage = searchViewModel.CurrentPage,
-            PageSize = searchViewModel.PageSize,
-            TotalItems = _studentRepository.GetStudentsCount(searchViewModel),
-        };
-        List<Student> students = _studentRepository.Pagination(searchViewModel);
-
-        ShowAllViewModel showAllViewModel = new ShowAllViewModel
-        {
-            Students = students,
-            Pagination = paginationViewModel,
-            Search = searchViewModel
-        };
-
-        return PartialView("_Search", showAllViewModel);
+        return PartialView("_SearchValidation" , searchViewModel);
     }
     public IActionResult GetHighestGrade()
     {
-        Student student = _studentRepository.GetHighestGrade();
-        return PartialView("_Student", student);
+        StudentSearchViewModel studentSearchViewModel = new StudentSearchViewModel
+        {
+            GradeFrom = _studentRepository.GetHighestGrade(),
+        };
+        PaginationViewModel paginationViewModel = new PaginationViewModel
+        {
+            CurrentPage = studentSearchViewModel.CurrentPage,
+            PageSize = studentSearchViewModel.PageSize,
+            TotalItems = _studentRepository.GetStudentsCount(studentSearchViewModel)
+        };
+        List<Student> PaginatedStudentList = _studentRepository.Pagination(studentSearchViewModel);
+        StudentListViewModel studentListViewModel = new StudentListViewModel
+        {
+            Students = PaginatedStudentList,
+            Pagination = paginationViewModel,
+            Search = studentSearchViewModel
+        };
+        return PartialView("_StudentResult", studentListViewModel);
     }
     public IActionResult GetLowestGrade()
     {
-        Student student = _studentRepository.GetLowestGrade();
-        return PartialView("_Student", student);
+        StudentSearchViewModel studentSearchViewModel = new StudentSearchViewModel
+        {
+            GradeFrom = _studentRepository.GetLowestGrade(),
+            GradeTo = _studentRepository.GetLowestGrade(),
+        };
+        PaginationViewModel paginationViewModel = new PaginationViewModel
+        {
+            CurrentPage = studentSearchViewModel.CurrentPage,
+            PageSize = studentSearchViewModel.PageSize,
+            TotalItems = _studentRepository.GetStudentsCount(studentSearchViewModel)
+        };
+        List<Student> PaginatedStudentList = _studentRepository.Pagination(studentSearchViewModel);
+        StudentListViewModel studentListViewModel = new StudentListViewModel
+        {
+            Students = PaginatedStudentList,
+            Pagination = paginationViewModel,
+            Search = studentSearchViewModel,
+
+        };
+        return PartialView("_StudentResult", studentListViewModel);
     }
     public IActionResult GetAverageGrade()
     {
@@ -159,7 +178,7 @@ public class StudentController : Controller
         List<Student> students = _studentRepository.GetFailedStudents();
         StudentSearchViewModel studentSearchViewModel = new StudentSearchViewModel
         {
-            GradeTo = 50
+            GradeTo = 49,
         };
         List<Student> FilteredStudents = _studentRepository.Pagination(studentSearchViewModel);
         PaginationViewModel paginationViewModel = new PaginationViewModel
@@ -168,21 +187,21 @@ public class StudentController : Controller
             PageSize = studentSearchViewModel.PageSize,
             TotalItems = students.Count
         };
-        ShowAllViewModel showAllViewModel = new ShowAllViewModel
+        StudentListViewModel studentListViewModel = new StudentListViewModel
         {
             Students = FilteredStudents,
             Pagination = paginationViewModel,
             Search = studentSearchViewModel
         };
 
-        return PartialView("_Search", showAllViewModel);
+        return PartialView("_StudentResult", studentListViewModel);
     }
     public IActionResult GetPassedStudents()
     {
         List<Student> students = _studentRepository.GetPassedStudents();
         StudentSearchViewModel studentSearchViewModel = new StudentSearchViewModel
         {
-            GradeFrom = 50
+            GradeFrom = 50,
         };
         List<Student> FilteredStudents = _studentRepository.Pagination(studentSearchViewModel);
         PaginationViewModel paginationViewModel = new PaginationViewModel
@@ -191,13 +210,13 @@ public class StudentController : Controller
             PageSize = studentSearchViewModel.PageSize,
             TotalItems = students.Count
         };
-        ShowAllViewModel showAllViewModel = new ShowAllViewModel
+        StudentListViewModel studentListViewModel = new StudentListViewModel
         {
             Students = FilteredStudents,
             Pagination = paginationViewModel,
             Search = studentSearchViewModel
         };
 
-        return PartialView("_Search", showAllViewModel);
+        return PartialView("_StudentResult", studentListViewModel);
     }
 }
