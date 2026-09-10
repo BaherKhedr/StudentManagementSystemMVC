@@ -39,13 +39,14 @@ namespace StudentManagementSystemMVC.Repository
             var student = _context.Students.FirstOrDefault(x => x.Id == id);
             return student;
         }
-        public Student GetHighestGrade()
+        public double? GetHighestGrade()
         {
-            return _context.Students.OrderByDescending(x => x.Grade).FirstOrDefault();
+            return _context.Students.Max(s => s.Grade);
+            
         }
-        public Student GetLowestGrade()
+        public double? GetLowestGrade()
         {
-            return _context.Students.OrderBy(x => x.Grade).FirstOrDefault();
+            return _context.Students.Min(s => s.Grade);
         }
         public double GetAverageGrade()
         {

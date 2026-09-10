@@ -1,6 +1,10 @@
 ﻿@model Student
 
-<form asp-controller="Student" asp-action="SaveEdit" method="post">
+<div id="validation">
+
+</div>
+
+<form asp-controller="Student" asp-action="Update" method="post" class="form">
     <div asp-validation-summary="All" style="color: red"></div>
 
         <input asp-for="Id" class="form-control" type="hidden" value="@Model?.Id" />
@@ -18,3 +22,15 @@
     </div>
     <button type="submit" class="btn btn-success mt-3">Save</button>
 </form>
+
+<div id="student">
+
+</div>
+
+@section Scripts{
+    <script>
+        const edit = AddOperation("student", "validation");
+
+        AjaxRequest("form", "submit", edit, "POST" , false);
+    </script>
+}

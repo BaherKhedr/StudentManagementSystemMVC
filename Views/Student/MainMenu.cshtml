@@ -1,0 +1,54 @@
+﻿@model StudentListViewModel
+
+<h1>All Students</h1>
+
+<div id="studentlist">
+    <partial name="_StudentList" model="Model.Students" />
+</div>
+
+<div id="pagination">
+    <partial name="_Pagination" model="Model"/>
+</div>
+
+<div id="student">
+
+</div>
+
+
+
+@section Scripts{
+<script>
+
+        $("#studentlist").on("click" , ".Details", function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("href"),
+                method:"GET",
+                success: function(response){
+                    $("#student").html(response);
+                }
+            }).fail(function(xhr){
+                console.log(xhr.status);
+            });
+        });
+
+        $("#pagination").on("click", ".pagination-link", function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("href"),
+                method: "GET",
+                success: function(response) {
+
+                    const newstudentlist = $(response).filter("#studentlist1");
+                    const newpagination = $(response).filter("#Pagination1");
+
+                    $("#studentlist").html(newstudentlist);
+                    $("#pagination").html(newpagination);
+                }
+            });
+        });
+
+</script>
+}

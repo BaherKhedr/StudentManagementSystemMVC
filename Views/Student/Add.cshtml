@@ -1,7 +1,8 @@
 ﻿@model Student
 
-<form asp-controller="Student" asp-action="SaveAdd" method="post">
-    <div asp-validation-summary="All" style="color: red"></div>
+<div id="validation"></div>
+
+<form asp-controller="Student" asp-action="Save" method="post" class="form">
     <div>
         <label>Name</label>
         <input asp-for="Name" class="form-control" value="@Model?.Name" />
@@ -16,7 +17,37 @@
     </div>
     <button type="submit" class="btn btn-success mb-3 mt-3">Add</button>
 </form>
-@if (TempData["Found"] != null)
-{
-    <div style="color: green">@TempData["Found"]</div>
+
+
+
+
+<div id="student">
+
+</div>
+
+
+
+@section Scripts{
+    
+    <script>
+        
+        $(".form").on("submit", function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url : $(this).attr("action"),
+                method : "POST",
+                data: $(this).serialize(),
+                success: function(response){
+                    
+                    const student = $(response).filter(".student");
+                    const validation = $(response).filter(".validation");
+
+                    $("#student").html(student);
+                    $("#validation").html(validation);
+                }
+            });
+        });
+
+    </script>
 }

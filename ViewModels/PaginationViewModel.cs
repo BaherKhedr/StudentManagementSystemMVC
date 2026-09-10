@@ -8,5 +8,7 @@
         public int TotalItems { get; set; }
 
         public int TotalPages => (int)(Math.Ceiling((double)TotalItems / PageSize));
+
+        public string ActionName { get; set; } = "";
     }
 }

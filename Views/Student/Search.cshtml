@@ -1,8 +1,13 @@
-﻿@model ShowAllViewModel
+﻿<h1>Search</h1>
 
-<h1>Search</h1>
+<div id="validation">
 
-<form asp-controller="Student" asp-action="Pagination" method="get" class="form">
+</div>
+
+<form asp-controller="Student" asp-action="SearchResult" method="get" class="form">
+
+    
+    
 
     <!-- Name -->
     <label class="form-label">Name</label>
@@ -44,16 +49,71 @@
 
 </form>
 
-<div id="div1">
+<div id="Studentlist">
+</div>
+
+<div id="Pagination">
+</div>
+
+<div id="details">
 
 </div>
 
-<div id="div2">
+@section Scripts {
+    <script>
 
-</div>
+        $(".form").on("submit" , function(event){
 
-@section Scripts{
-<script>
-    PaginationForForm("form" , "div1" , "div2");
-</script>
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("action"),
+                method: "GET",
+                data:
+                    $(this).serialize(),
+                success: function(response){
+
+                    const studentlist = $(response).filter("#studentlist1");
+                    const pagination = $(response).filter("#Pagination1");
+                    const validation = $(response).filter(".newvalidation");
+
+                    $("#Studentlist").html(studentlist);
+                    $("#Pagination").html(pagination);
+                    $("#validation").html(validation);
+                }
+            });
+        });
+
+
+        $("#Pagination").on("click", ".pagination-link", function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("href"),
+                method: "GET",
+                success: function(response){
+
+                    const newstudentlist = $(response).filter("#studentlist1");
+                    const newpagination = $(response).filter("#Pagination1");
+
+                    $("#Studentlist").html(newstudentlist);
+                    $("#Pagination").html(newpagination);
+                }
+            });
+        });
+
+        $("#Studentlist").on("click", ".Details", function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("href"),
+                method: "GET",
+                success: function(response){
+                    $("#details").html(response);
+                }
+            });
+        });
+
+        
+    </script>
 }

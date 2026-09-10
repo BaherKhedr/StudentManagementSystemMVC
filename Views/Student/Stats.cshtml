@@ -1,36 +1,93 @@
-﻿<a asp-controller="Student" asp-action="GetHighestGrade" class="btn btn-primary mt-2 mb2 OneRowHighest">Get Highest Grade</a>
+﻿
+
+
+<a asp-controller="Student" asp-action="GetHighestGrade" class="btn btn-primary mt-2 mb2 stats-operation" data-target="HighestGrade">Get Highest Grade</a>
 <div id="HighestGrade">
 </div>
-
-<a asp-controller="Student" asp-action="GetAverageGrade" class="btn btn-secondary mt-2 mb2 OneRowAverage">Get Average Grade</a>
+<div id="HighestGradePagination">
+</div>
+<a asp-controller="Student" asp-action="GetAverageGrade" class="btn btn-secondary mt-2 mb2 Average">Get Average Grade</a>
 <div id="AverageGrade">
 </div>
-
-<div>
-    <a asp-controller="Student" asp-action="GetLowestGrade" class="btn mt-2 mb2 btn-danger OneRowLowest">Get Lowest Grade</a>
-    <div id="LowestGrade">
-    </div>
+<a asp-controller="Student" asp-action="GetLowestGrade" class="btn mt-2 mb2 btn-danger stats-operation" data-target="LowestGrade">Get Lowest Grade</a>
+<div id="LowestGrade">
+</div>
+<div id="LowestGradePagination">
 </div>
 
-<a asp-controller="Student" asp-action="GetPassedStudents" class="btn btn-primary mt-2 mb2 MoreRowsPassed">Get Passed Students</a>
+<a asp-controller="Student" asp-action="GetPassedStudents" class="btn btn-primary mt-2 mb2 stats-operation" data-target="PassedStudents">Get Passed Students</a>
 <div id="PassedStudents">
 </div>
-<div id="PassedPagination">
+<div id="PassedStudentsPagination">
 </div>
 
-<a asp-controller="Student" asp-action="GetFailedStudents" class="btn btn-danger mt-2 mb2 MoreRowsFailed">Get Failed Students</a>
+<a asp-controller="Student" asp-action="GetFailedStudents" class="btn btn-danger mt-2 mb2 stats-operation" data-target="FailedStudents">Get Failed Students</a>
 <div id="FailedStudents">
 </div>
-<div id="FailedPagination">
+<div id="FailedStudentsPagination">
+</div>
+
+<div id="details">
+
 </div>
 
 @section Scripts {
     <script>
-        LinkwithOneRowOutPut("HighestGrade", "OneRowHighest");
-        LinkwithOneRowOutPut("LowestGrade", "OneRowLowest");
-        LinkwithOneRowOutPut("AverageGrade", "OneRowAverage");
 
-        LinkwithMoreThanOneRowOutPut("PassedStudents", "PassedPagination", "MoreRowsPassed");
-        LinkwithMoreThanOneRowOutPut("FailedStudents", "FailedPagination", "MoreRowsFailed");
+        $(".Average").on("click", function(event){
+            event.preventDefault();
+
+            $.ajax({
+                url:$(this).attr("href"),
+                method: "GET",
+                success:function(response){
+                    $("#AverageGrade").html(response);
+                }
+            });
+        });
+
+        $(".stats-operation").on("click", function(event) {
+            event.preventDefault();
+
+            const target = $(this).data("target");
+            
+            $.ajax({
+                url:$(this).attr("href"),
+                method: "GET",
+                success: function(response){
+
+                    const newstudentlist = $(response).filter("#studentlist1");
+                    const newpagination = $(response).filter("#Pagination1");
+
+                    $("#" + target).html(newstudentlist);
+                    $("#" + target + "Pagination").html(newpagination);
+                }
+            });
+        });
+
+        $("div[id$='Pagination']").on("click", ".pagination-link", function(event) {
+            event.preventDefault();
+
+            console.log("Pagination clicked");
+
+            const target = $(this)
+                .closest(".pagination-container")
+                .parent()
+                .parent()
+                .attr("id");
+
+            $.ajax({
+                url: $(this).attr("href"),
+                method: "GET",
+                success: function (response){
+                    const newstudentlist = $(response).filter("#studentlist1");
+                    const newpagination = $(response).filter("#Pagination1");
+
+                    $("#" + target.replace("Pagination","")).html(newstudentlist);
+                    $("#" + target).html(newpagination);
+                }
+            });
+        });
+
     </script>
 }

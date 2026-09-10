@@ -1,11 +1,11 @@
-﻿@model ShowAllViewModel
+﻿@model StudentListViewModel
 
-<nav aria-label="Page navigation example" class="pagination-container">
+<nav aria-label="Page navigation example" class="pagination-container" data-target="@Model.Pagination.ActionName">
     <ul class="pagination">
         @if (Model.Pagination.CurrentPage > 1)
         {
             <li class="page-item">
-                <a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@(Model.Pagination.CurrentPage - 1)"
+                <a asp-controller="Student" asp-action="SearchResult" asp-route-CurrentPage="@(Model.Pagination.CurrentPage - 1)"
                    asp-route-Name="@Model.Search.Name"
                    asp-route-AgeFrom="@Model.Search.AgeFrom"
                    asp-route-AgeTo="@Model.Search.AgeTo"
@@ -18,7 +18,7 @@
         @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
         {
             <li class="page-item">
-                <a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@i"
+                <a asp-controller="Student" asp-action="SearchResult" asp-route-CurrentPage="@i"
                    asp-route-Name="@Model.Search.Name"
                    asp-route-AgeFrom="@Model.Search.AgeFrom"
                    asp-route-AgeTo="@Model.Search.AgeTo"
@@ -32,7 +32,7 @@
         @if (Model.Pagination.CurrentPage < Model.Pagination.TotalPages)
         {
             <li class="page-item">
-                <a asp-controller="Student" asp-action="Pagination" asp-route-CurrentPage="@(Model.Pagination.CurrentPage + 1)"
+                <a asp-controller="Student" asp-action="SearchResult" asp-route-CurrentPage="@(Model.Pagination.CurrentPage + 1)"
                    asp-route-Name="@Model.Search.Name"
                    asp-route-AgeFrom="@Model.Search.AgeFrom"
                    asp-route-AgeTo="@Model.Search.AgeTo"

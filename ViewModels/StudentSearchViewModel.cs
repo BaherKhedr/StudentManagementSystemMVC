@@ -31,6 +31,7 @@ namespace StudentManagementSystemMVC.ViewModels
         public int CurrentPage { get; set; } = 1;
         public int PageSize { get; set; } = 10;
 
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (AgeFrom.HasValue && AgeTo.HasValue && AgeFrom > AgeTo)

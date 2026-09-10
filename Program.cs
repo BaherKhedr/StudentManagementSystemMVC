@@ -35,7 +35,7 @@ namespace StudentManagementSystemMVC
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Student}/{action=ShowAll}/{id?}")
+                pattern: "{controller=Student}/{action=MainMenu}/{id?}")
                 .WithStaticAssets();
 
             app.Run();

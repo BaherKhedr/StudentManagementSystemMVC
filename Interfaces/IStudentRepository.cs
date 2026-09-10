@@ -9,8 +9,8 @@ namespace StudentManagementSystemMVC.Interfaces
         int GetStudentsCount(List<Student> students);
         List<Student> ShowAll();
         Student GetById(int id);
-        public Student GetHighestGrade();
-        public Student GetLowestGrade();
+        public double? GetHighestGrade();
+        public double? GetLowestGrade();
         double GetAverageGrade();
         List<Student> GetPassedStudents();
         List<Student> GetFailedStudents();
