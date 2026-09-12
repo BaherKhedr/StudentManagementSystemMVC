@@ -1,18 +1,18 @@
 ﻿
 
 
-<a asp-controller="Student" asp-action="GetHighestGrade" class="btn btn-primary mt-2 mb2 stats-operation" data-target="HighestGrade">Get Highest Grade</a>
-<div id="HighestGrade">
+<a asp-controller="Student" asp-action="GetHighestGrade" class="btn btn-primary mt-2 mb2 stats-operation" data-target="HighestGradeStudents">Get Highest Grade</a>
+<div id="HighestGradeStudents">
 </div>
-<div id="HighestGradePagination">
+<div id="HighestGradeStudentsPagination">
 </div>
 <a asp-controller="Student" asp-action="GetAverageGrade" class="btn btn-secondary mt-2 mb2 Average">Get Average Grade</a>
 <div id="AverageGrade">
 </div>
-<a asp-controller="Student" asp-action="GetLowestGrade" class="btn mt-2 mb2 btn-danger stats-operation" data-target="LowestGrade">Get Lowest Grade</a>
-<div id="LowestGrade">
+<a asp-controller="Student" asp-action="GetLowestGrade" class="btn mt-2 mb2 btn-danger stats-operation" data-target="LowestGradeStudents">Get Lowest Grade</a>
+<div id="LowestGradeStudents">
 </div>
-<div id="LowestGradePagination">
+<div id="LowestGradeStudentsPagination">
 </div>
 
 <a asp-controller="Student" asp-action="GetPassedStudents" class="btn btn-primary mt-2 mb2 stats-operation" data-target="PassedStudents">Get Passed Students</a>
@@ -68,8 +68,6 @@
         $("div[id$='Pagination']").on("click", ".pagination-link", function(event) {
             event.preventDefault();
 
-            console.log("Pagination clicked");
-
             const target = $(this)
                 .closest(".pagination-container")
                 .parent()
@@ -85,6 +83,18 @@
 
                     $("#" + target.replace("Pagination","")).html(newstudentlist);
                     $("#" + target).html(newpagination);
+                }
+            });
+        });
+
+        $("div[id$='Students']").on("click",".Details",function(event){
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("href"),
+                method: "GET",
+                success: function(response) {
+                    $("#details").html(response);
                 }
             });
         });

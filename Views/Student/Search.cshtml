@@ -59,6 +59,10 @@
 
 </div>
 
+<div id="confirmdelete">
+
+</div>
+
 @section Scripts {
     <script>
 
@@ -114,6 +118,17 @@
             });
         });
 
+        $("#Studentlist").on("click", ".Delete", function(event) {
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr("href"),
+                method: "GET",
+                success: function(response) {
+                    $("#confirmdelete").html(response);
+                }
+            });
+        });
         
     </script>
 }

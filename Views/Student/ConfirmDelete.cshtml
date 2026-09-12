@@ -1,6 +1,6 @@
 ﻿@model Student
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover table-to-delete">
     <tr>
         <th>Id</th>
         <th>Name</th>
@@ -13,9 +13,16 @@
         <td>@Model.Age</td>
         <td>@Model.Grade</td>
         <td>
-            <form asp-controller="Student" asp-action="ConfirmDelete" asp-route-id="@Model.Id" method="post">
+            <form asp-controller="Student" asp-action="ConfirmDelete" asp-route-id="@Model.Id" method="post" class="confirm-delete-form">
                 <button type="submit" class="btn btn-danger">Confirm Delete</button>
             </form>
         </td>
     </tr>
 </table>
+
+@section Scripts{
+    <script>
+        
+
+    </script>
+}
